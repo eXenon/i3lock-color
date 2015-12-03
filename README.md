@@ -3,7 +3,7 @@ i3lock-color
 
 *making i3lock's typing indicator color scheme configurable*
 
-I added the following command line options:
+eBrnd added the following command line options:
 * `--insidevercolor=rrggbbaa` -- Inside of the circle while the password is being verified
 * `--insidewrongcolor=rrggbbaa` -- Inside of the circle when a wrong password was entered
 * `--insidecolor=rrggbbaa` -- Inside of the circle while typing/idle
@@ -16,6 +16,9 @@ I added the following command line options:
 * `--bshlcolor=rrggbbaa` -- Backspace highlight segments
 
 All the colors have an alpha channel now. Please keep in mind that this was not intended when the program was originally written, so making thing transparent that weren't before can make it look strange.
+
+I added an option to display the circle only on certain screens in a multi-display setup.
+*  `--singlescreen=i` -- Display the circle only on screen number i
 
 ### Examples:
 
