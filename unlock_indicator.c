@@ -67,6 +67,8 @@ extern char linecolor[9];
 extern char textcolor[9];
 extern char keyhlcolor[9];
 extern char bshlcolor[9];
+/* multi-screen option */
+extern int singlescreen;
 
 /*******************************************************************************
  * Local variables.
@@ -268,10 +270,10 @@ xcb_pixmap_t draw_image(uint32_t *resolution) {
         char *text = NULL;
         switch (pam_state) {
             case STATE_PAM_VERIFY:
-                text = "verifying…";
+                text = "";
                 break;
             case STATE_PAM_WRONG:
-                text = "wrong!";
+                text = "";
                 break;
             default:
                 break;
@@ -338,12 +340,14 @@ xcb_pixmap_t draw_image(uint32_t *resolution) {
     if (xr_screens > 0) {
         /* Composite the unlock indicator in the middle of each screen. */
         for (int screen = 0; screen < xr_screens; screen++) {
-            int x = (xr_resolutions[screen].x + ((xr_resolutions[screen].width / 2) - (BUTTON_DIAMETER / 2)));
-            int y = (xr_resolutions[screen].y + ((xr_resolutions[screen].height / 2) - (BUTTON_DIAMETER / 2)));
-            cairo_set_source_surface(xcb_ctx, output, x, y);
-            cairo_rectangle(xcb_ctx, x, y, BUTTON_DIAMETER, BUTTON_DIAMETER);
-            cairo_fill(xcb_ctx);
-        }
+	    if (screen == singlescreen || singlescreen == -1){
+       	        int x = (xr_resolutions[screen].x + ((xr_resolutions[screen].width / 2) - (BUTTON_DIAMETER / 2)));
+                int y = (xr_resolutions[screen].y + ((xr_resolutions[screen].height / 2) - (BUTTON_DIAMETER / 2)));
+                cairo_set_source_surface(xcb_ctx, output, x, y);
+                cairo_rectangle(xcb_ctx, x, y, BUTTON_DIAMETER, BUTTON_DIAMETER);
+                cairo_fill(xcb_ctx);
+            }
+	}
     } else {
         /* We have no information about the screen sizes/positions, so we just
          * place the unlock indicator in the middle of the X root window and

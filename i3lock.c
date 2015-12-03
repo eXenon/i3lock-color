@@ -52,6 +52,8 @@ char linecolor[9] = "000000ff";
 char textcolor[9] = "000000ff";
 char keyhlcolor[9] = "33db00ff";
 char bshlcolor[9] = "db3300ff";
+/* option to display only on one screen */
+int singlescreen = -1;
 
 uint32_t last_resolution[2];
 xcb_window_t win;
@@ -595,6 +597,9 @@ int main(int argc, char *argv[]) {
         {"textcolor", required_argument, NULL, 0},
         {"keyhlcolor", required_argument, NULL, 0},
         {"bshlcolor", required_argument, NULL, 0},
+
+	/* option to display only on one screen */
+	{"singlescreen", required_argument, NULL, 0},
 #endif
         {NULL, no_argument, NULL, 0}
     };
@@ -754,6 +759,13 @@ int main(int argc, char *argv[]) {
 
                 if (strlen(arg) != 8 || sscanf(arg, "%08[0-9a-fA-F]", bshlcolor) != 1)
                     errx(1, "bshlcolor is invalid, color must be given in 8-byte format: rrggbb\n");
+            }
+            else if (strcmp(longopts[optind].name, "singlescreen") == 0) {
+                char *arg = optarg;
+		
+		/* Try to convert to int and check it is positive */
+		if (sscanf(arg, "%d", &singlescreen) < 0)
+		    errx(1, "singlescreen is invalid, the screen number must be a positive integer");
             }
 #endif
             break;
